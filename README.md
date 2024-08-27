@@ -2,6 +2,14 @@
 
 Python scripts to fetch emails from Gmail, store them in a database, and perform rule-based operations on them.
 
+## Table of Contents
+
+- [Installation and Setup](#installation-and-setup)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [References](#references)
+- [Video Demo](#video-demo)
+
 ## Installation and Setup
 
 1. Clone the repository:

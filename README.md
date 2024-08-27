@@ -1,4 +1,4 @@
-# Gmail Rule-Based Operations
+# HappyFox Assignment
 
 Python script that integrates with the Gmail API to perform rule-based operations on emails.
 
@@ -7,7 +7,7 @@ Python script that integrates with the Gmail API to perform rule-based operation
 1. Clone the repository:
 
    ```
-   git clone https://github.com/yourusername/gmail-rule-based-operations.git
+   git clone https://github.com/Nilesh2000/gmail-rule-based-operations.git
    cd gmail-rule-based-operations
    ```
 

@@ -21,7 +21,7 @@ class DatabaseManager:
         Args:
             db_url: The database URL. Defaults to 'sqlite:///db.sqlite3'.
         """
-        logging.info("Initializing DatabaseManager with URL: %s", db_url)
+        logging.info(f"Initializing DatabaseManager with URL: {db_url}")
         self.engine = create_engine(db_url)
         self.Session = sessionmaker(bind=self.engine)
         Base.metadata.create_all(self.engine)
@@ -33,7 +33,7 @@ class DatabaseManager:
         Args:
             emails: A list of dictionaries containing email data.
         """
-        logging.info("Starting to save %d emails to the database", len(emails))
+        logging.info(f"Starting to save {len(emails)} emails to the database")
         session = self.Session()
         try:
             for email in emails:
@@ -46,10 +46,10 @@ class DatabaseManager:
                 )
                 session.add(new_email)
             session.commit()
-            logging.info("Finished saving %d emails to the database", len(emails))
+            logging.info(f"Finished saving {len(emails)} emails to the database")
         except Exception as e:
             session.rollback()
-            logging.error("Error saving emails to database: %s", e)
+            logging.error(f"Error saving emails to database: {e}")
             logging.exception("Exception details:")
         finally:
             session.close()
@@ -67,7 +67,7 @@ class DatabaseManager:
             emails = session.query(Email).all()
             return [email.to_dict() for email in emails]
         except Exception as e:
-            logging.error("Error fetching emails from database: %s", e)
+            logging.error(f"Error fetching emails from database: {e}")
             logging.exception("Exception details:")
             return []
         finally:

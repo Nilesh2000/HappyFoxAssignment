@@ -27,6 +27,8 @@ def main(num_messages: int) -> None:
         db_manager = DatabaseManager()
         db_manager.save_emails(emails)
 
+        logging.info(f"Fetched {len(emails)} emails")
+
         logging.info("Email fetch and save process completed")
     except Exception:
         logging.error("An unexpected error occurred during the email fetch and save process")

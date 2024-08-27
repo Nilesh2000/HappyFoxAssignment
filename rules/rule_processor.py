@@ -36,7 +36,7 @@ class EmailRule:
         self.type: str = rule_data["type"]
         self.conditions: List[Dict[str, str]] = rule_data["condition"]
         self.actions: List[Dict[str, str]] = rule_data["action"]
-        logging.info("Initialized rule: %s", self.name)
+        logging.info(f"Initialized rule: {self.name}")
 
     def evaluate(self, email: Dict[str, Any]) -> bool:
         """
@@ -50,7 +50,7 @@ class EmailRule:
         """
         evaluation_function = all if self.type == "all" else any
         result = evaluation_function(self.evaluate_condition(cond, email) for cond in self.conditions)
-        logging.info("Rule '%s' evaluation result: %s", self.name, result)
+        logging.info(f"Rule '{self.name}' evaluation result: {result}")
         return result
 
     def evaluate_condition(self, condition: Dict[str, str], email: Dict[str, Any]) -> bool:
@@ -78,7 +78,7 @@ class EmailRule:
             result = False
 
         logging.info(
-            "Condition evaluation: field='%s', predicate='%s', value='%s', result=%s", field, predicate, value, result
+            f"Condition evaluation: field='{field}', predicate='{predicate}', value='{value}', result={result}"
         )
         return result
 
@@ -100,7 +100,7 @@ class EmailRule:
             "date received": "date",
         }
         value = str(email.get(field_mapping.get(field, ""), "")).lower()
-        logging.debug("Field '%s' value: %s", field, value)
+        logging.debug(f"Field '{field}' value: {value}")
         return value
 
     def evaluate_text_condition(self, field_value: str, predicate: str, value: str) -> bool:
@@ -123,7 +123,7 @@ class EmailRule:
             return value == field_value
         elif predicate == "not equals":
             return value != field_value
-        logging.warning("Unknown predicate '%s' for text condition", predicate)
+        logging.warning(f"Unknown predicate '{predicate}' for text condition")
         return False
 
     def evaluate_date_condition(self, field_value: str, predicate: str, value: str) -> bool:
@@ -149,7 +149,7 @@ class EmailRule:
             elif unit == "m":
                 days_to_subtract = num_days * 30
             else:
-                logging.warning("Unknown time unit '%s' for date condition", unit)
+                logging.warning(f"Unknown time unit '{unit}' for date condition")
                 return False
 
             rule_date = datetime.datetime.now() - datetime.timedelta(days=days_to_subtract)
@@ -159,11 +159,11 @@ class EmailRule:
             elif predicate == "greater than":
                 return email_date <= rule_date
 
-            logging.warning("Unknown predicate '%s' for date condition", predicate)
+            logging.warning(f"Unknown predicate '{predicate}' for date condition")
             return False
 
         except ValueError as e:
-            logging.error("Error parsing date: %s", e)
+            logging.error(f"Error parsing date: {e}")
         return False
 
     def apply_actions(self, email: Dict[str, Any]) -> None:
@@ -185,11 +185,9 @@ class EmailRule:
                         self.mark_email_as_read(email)
                     elif action_value == "unread":
                         self.mark_email_as_unread(email)
-                logging.info(
-                    "Applied action: type='%s', value='%s' to email ID: %s", action_type, action_value, email["id"]
-                )
+                logging.info(f"Applied action: type='{action_type}', value='{action_value}' to email ID: {email['id']}")
             except Exception:
-                logging.error("Error applying action: %s %s to email ID: %s", action_type, action_value, email["id"])
+                logging.error(f"Error applying action: {action_type} {action_value} to email ID: {email['id']}")
                 logging.error(traceback.format_exc())
 
     def move_email(self, email: Dict[str, Any], target_label: str) -> None:
@@ -260,9 +258,9 @@ class EmailRule:
             service.users().messages().modify(
                 userId="me", id=email["id"], body={"removeLabelIds": ["UNREAD"]}
             ).execute()
-            logging.info("Marked email ID: %s as read", email["id"])
+            logging.info(f"Marked email ID: {email['id']} as read")
         except Exception as e:
-            logging.error("Error marking email as read: %s", e)
+            logging.error(f"Error marking email as read: {e}")
             logging.error(traceback.format_exc())
 
     def mark_email_as_unread(self, email: Dict[str, Any]) -> None:
@@ -275,7 +273,7 @@ class EmailRule:
         service = get_gmail_service()
         try:
             service.users().messages().modify(userId="me", id=email["id"], body={"addLabelIds": ["UNREAD"]}).execute()
-            logging.info("Marked email ID: %s as unread", email["id"])
+            logging.info(f"Marked email ID: {email['id']} as unread")
         except Exception as e:
-            logging.error("Error marking email as unread: %s", e)
+            logging.error(f"Error marking email as unread: {e}")
             logging.error(traceback.format_exc())

@@ -18,17 +18,17 @@ class EmailRuleEngine:
         self.rules: List[EmailRule] = load_rules()
         self.db_manager = DatabaseManager()
         self.emails: List[Dict[str, Any]] = self.db_manager.fetch_emails()
-        logging.info("Initialized EmailRuleEngine with %d rules and %d emails", len(self.rules), len(self.emails))
+        logging.info(f"Initialized EmailRuleEngine with {len(self.rules)} rules and {len(self.emails)} emails")
 
     def apply_rules(self) -> None:
         """Apply all rules to all emails in the database."""
         for rule in self.rules:
-            logging.info("Applying rule: %s", rule.name)
+            logging.info(f"Applying rule: {rule.name}")
             for email in self.emails:
                 try:
                     if rule.evaluate(email):
                         rule.apply_actions(email)
                 except Exception:
-                    logging.error("Error applying rule '%s' to email ID: %s", rule.name, email["id"])
+                    logging.error(f"Error applying rule '{rule.name}' to email ID: {email['id']}")
                     logging.exception("Exception details:")
         logging.info("Finished applying all rules")

@@ -29,7 +29,7 @@ def _load_credentials() -> Optional[Credentials]:
         if os.path.exists(TOKEN_FILE):
             return Credentials.from_authorized_user_file(TOKEN_FILE, SCOPES)
     except Exception as e:
-        logging.error("Error loading credentials: %s", e)
+        logging.error(f"Error loading credentials: {e}")
     return None
 
 
@@ -48,7 +48,7 @@ def _refresh_credentials(creds: Optional[Credentials]) -> Optional[Credentials]:
             creds.refresh(Request())
             return creds
         except RefreshError as e:
-            logging.error("Error refreshing credentials: %s", e)
+            logging.error(f"Error refreshing credentials: {e}")
     return None
 
 
@@ -63,7 +63,7 @@ def _get_new_credentials() -> Optional[Credentials]:
         flow = InstalledAppFlow.from_client_secrets_file(CREDENTIALS_FILE, SCOPES)
         return flow.run_local_server(port=0)
     except Exception as e:
-        logging.error("Error obtaining new credentials: %s", e)
+        logging.error(f"Error obtaining new credentials: {e}")
         return None
 
 
@@ -78,7 +78,7 @@ def _save_credentials(creds: Credentials) -> None:
         with open(TOKEN_FILE, "w") as token:
             token.write(creds.to_json())
     except IOError as e:
-        logging.error("Error saving credentials: %s", e)
+        logging.error(f"Error saving credentials: {e}")
 
 
 def authenticate_gmail() -> Optional[Credentials]:
@@ -99,7 +99,7 @@ def authenticate_gmail() -> Optional[Credentials]:
                 return None
         return creds
     except Exception as e:
-        logging.error("Error during authentication: %s", e)
+        logging.error(f"Error during authentication: {e}")
         logging.exception("Exception details:")
         return None
 
@@ -119,6 +119,6 @@ def get_gmail_service() -> Optional[Resource]:
             logging.error("Authentication failed. Unable to create Gmail service.")
             return None
     except Exception as e:
-        logging.error("Error creating Gmail service: %s", e)
+        logging.error(f"Error creating Gmail service: {e}")
         logging.exception("Exception details:")
         return None

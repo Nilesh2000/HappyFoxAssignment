@@ -29,10 +29,10 @@ def fetch_emails(num_messages: int = 100) -> List[Dict[str, Any]]:
         service = get_gmail_service()
         messages = _get_messages(service, num_messages)
         emails = [_parse_email(service, message["id"]) for message in messages]
-        logging.info("Fetched %d emails", len(emails))
+        logging.info(f"Fetched {len(emails)} emails")
         return emails
     except Exception as e:
-        logging.error("Error fetching emails: %s", e)
+        logging.error(f"Error fetching emails: {e}")
         logging.exception("Exception details:")
         return []
 
@@ -48,14 +48,14 @@ def _get_messages(service: Resource, num_messages: int) -> List[Dict[str, Any]]:
     Returns:
         A list of message dictionaries.
     """
-    logging.info("Fetching %d messages from Gmail", num_messages)
+    logging.info(f"Fetching {num_messages} messages from Gmail")
     try:
         results = service.users().messages().list(userId="me", labelIds=["INBOX"], maxResults=num_messages).execute()
         messages = results.get("messages", [])
-        logging.info("Retrieved %d messages", len(messages))
+        logging.info(f"Retrieved {len(messages)} messages")
         return messages
     except Exception as e:
-        logging.error("Error getting messages: %s", e)
+        logging.error(f"Error getting messages: {e}")
         logging.error(traceback.format_exc())
         return []
 
@@ -71,7 +71,7 @@ def _parse_email(service: Resource, message_id: str) -> Dict[str, Any]:
     Returns:
         A dictionary containing parsed email data.
     """
-    logging.info("Parsing email with ID: %s", message_id)
+    logging.info(f"Parsing email with ID: {message_id}")
     try:
         email = service.users().messages().get(userId="me", id=message_id).execute()
         headers = email.get("payload", {}).get("headers", [])
@@ -89,14 +89,11 @@ def _parse_email(service: Resource, message_id: str) -> Dict[str, Any]:
         email_data["body"] = _get_email_body(email)
 
         logging.info(
-            "Parsed email: Subject: %s, From: %s, Date: %s",
-            email_data["subject"],
-            email_data["sender"],
-            email_data["date"],
+            f"Parsed email: Subject: {email_data['subject']}, From: {email_data['sender']}, Date: {email_data['date']}"
         )
         return email_data
     except Exception as e:
-        logging.error("Error parsing email with ID %s: %s", message_id, e)
+        logging.error(f"Error parsing email with ID {message_id}: {e}")
         logging.error(traceback.format_exc())
         return {"id": message_id, "subject": "", "sender": "", "date": None, "body": ""}
 
@@ -116,7 +113,7 @@ def _parse_date(date_string: str) -> Optional[datetime]:
         timestamp = mktime_tz(parsed_date)
         return datetime.fromtimestamp(timestamp)
     else:
-        logging.warning("Unable to parse date: %s", date_string)
+        logging.warning(f"Unable to parse date: {date_string}")
         return None
 
 
@@ -140,7 +137,7 @@ def _get_email_body(email: Dict[str, Any]) -> str:
     if body_data:
         # Decode the base64 encoded body
         decoded_body = base64.urlsafe_b64decode(body_data).decode("utf-8")
-        logging.info("Email body extracted, length: %d characters", len(decoded_body))
+        logging.info(f"Email body extracted, length: {len(decoded_body)} characters")
         return decoded_body
     logging.warning("No email body found")
     return ""

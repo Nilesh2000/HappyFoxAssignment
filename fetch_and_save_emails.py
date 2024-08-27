@@ -1,5 +1,5 @@
 """
-This script applies operations to emails in the database using Gmail API.
+This script fetches emails from Gmail and saves them to the database.
 """
 
 import argparse
@@ -7,7 +7,6 @@ import logging
 from typing import Any, Dict, List
 
 from db.database_manager import DatabaseManager
-from email_rule_engine import EmailRuleEngine
 from gmail.fetch import fetch_emails
 
 # Configure logging
@@ -15,11 +14,11 @@ from utils.logging_config import configure_logging
 
 
 def main(num_messages: int) -> None:
-    """Main function to run the email rule application process."""
+    """Main function to fetch emails and save them to the database."""
     configure_logging()
 
     try:
-        logging.info("Starting email rule application process")
+        logging.info("Starting email fetch and save process")
 
         # Fetch emails from Gmail
         emails: List[Dict[str, Any]] = fetch_emails(num_messages)
@@ -28,18 +27,14 @@ def main(num_messages: int) -> None:
         db_manager = DatabaseManager()
         db_manager.save_emails(emails)
 
-        # Apply rules to emails
-        engine = EmailRuleEngine()
-        engine.apply_rules()
-
-        logging.info("Email rule application process completed")
+        logging.info("Email fetch and save process completed")
     except Exception:
-        logging.error("An unexpected error occurred during the email rule application process")
+        logging.error("An unexpected error occurred during the email fetch and save process")
         logging.exception("Exception details:")
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Email rule application process")
+    parser = argparse.ArgumentParser(description="Email fetch and save process")
     parser.add_argument("--num_messages", type=int, default=25, help="Number of messages to fetch from Gmail")
     args = parser.parse_args()
 

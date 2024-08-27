@@ -119,7 +119,7 @@ class GmailAuthenticator:
         try:
             creds = cls.authenticate_gmail()
             if creds:
-                return build("gmail", "v1", credentials=creds)
+                return build("gmail", "v1", credentials=creds, cache_discovery=False)
             else:
                 logging.error("Authentication failed. Unable to create Gmail service.")
                 return None

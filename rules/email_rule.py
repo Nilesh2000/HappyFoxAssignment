@@ -131,13 +131,28 @@ class EmailRule:
         """
         try:
             email_date: datetime.datetime = datetime.datetime.strptime(field_value, "%Y-%m-%d %H:%M:%S")
-            rule_date: datetime.datetime = datetime.datetime.strptime(value, "%d/%m/%Y")
+
+            num_days, unit = value.split()
+            num_days = int(num_days)
+
+            if unit == "D":
+                days_to_subtract = num_days
+            elif unit == "M":
+                days_to_subtract = num_days * 30
+            else:
+                logging.warning("Unknown time unit '%s' for date condition", unit)
+                return False
+
+            rule_date = datetime.datetime.now() - datetime.timedelta(days=days_to_subtract)
 
             if predicate == "less than":
-                return email_date < rule_date
+                return email_date >= rule_date
             elif predicate == "greater than":
-                return email_date > rule_date
+                return email_date <= rule_date
+
             logging.warning("Unknown predicate '%s' for date condition", predicate)
+            return False
+
         except ValueError as e:
             logging.error("Error parsing date: %s", e)
         return False

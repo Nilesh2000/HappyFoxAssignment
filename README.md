@@ -1,14 +1,14 @@
 # HappyFox Assignment
 
-Python script that integrates with the Gmail API to perform rule-based operations on emails.
+Python scripts to fetch emails from Gmail, store them in a database, and perform rule-based operations on them.
 
 ## Installation and Setup
 
 1. Clone the repository:
 
    ```
-   git clone https://github.com/Nilesh2000/gmail-rule-based-operations.git
-   cd gmail-rule-based-operations
+   git clone https://github.com/Nilesh2000/HappyFoxAssignment.git
+   cd HappyFoxAssignment
    ```
 
 2. Create and activate a virtual environment:
@@ -39,9 +39,12 @@ Python script that integrates with the Gmail API to perform rule-based operation
    ```
 
 6. Run the script to apply rules to the emails in the database:
+
    ```
    python run_rule_engine.py
    ```
+
+7. You can view logs in the generated `app.log` file.
 
 ## Project Structure
 

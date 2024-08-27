@@ -32,9 +32,15 @@ Python script that integrates with the Gmail API to perform rule-based operation
    - Create credentials (OAuth 2.0 Client ID) and download the `credentials.json` file
    - Place the `credentials.json` file in the project root directory
 
-5. Run the script:
+5. Run the script to fetch and store emails in the database. Number of messages to be fetched is configurable and defaults to 25. (This step is to be done only once):
+
    ```
-   python main.py
+   python fetch_and_save_emails.py --num-messages 100
+   ```
+
+6. Run the script to apply rules to the emails in the database:
+   ```
+   python run_rule_engine.py
    ```
 
 ## Project Structure
@@ -44,23 +50,23 @@ Python script that integrates with the Gmail API to perform rule-based operation
 ├── .gitignore # Ignore files and directories
 ├── .pre-commit-config.yaml # Pre-commit configuration
 ├── Assignment.pdf # Assignment PDF
+├── README.md # This file
 ├── cz.json # Commitizen configuration
-├── db # Database
+├── db
 │   ├── database_manager.py # Database manager
 │   └── models.py # Database models
-├── email_rule_engine.py # Email rule engine
+├── fetch_and_save_emails.py # Script to fetch and store emails in the database
 ├── gmail
 │   ├── authenticate.py # Gmail authentication
-│   └── fetch.py # Gmail fetch
-├── main.py # Main script
-├── README.md # README
-├── requirements.txt # Requirements
-├── rules # Rules
-│   ├── email_rule.py # Email rule
-│   └── rule_loader.py # Rule loader
-├── rules.json # Rules
-├── save_emails_to_db.py # Save emails to database
-└── utils # Utils
+│   └── email_fetcher.py # Gmail email fetcher
+├── requirements.txt # Project dependencies
+├── rule_engine_manager.py # Rule engine manager
+├── rules
+│   ├── rule_loader.py # Rule loader
+│   └── rule_processor.py # Rule processor
+├── rules.json # Rules configuration
+├── run_rule_engine.py # Script to apply rules to the emails in the database
+└── utils
     └── logging_config.py # Logging configuration
 ```
 

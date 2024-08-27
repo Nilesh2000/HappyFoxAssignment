@@ -5,13 +5,16 @@ This module defines the EmailRule class for evaluating and applying rules to ema
 import datetime
 import logging
 import traceback
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
+
+from googleapiclient.discovery import Resource
 
 from gmail.authenticate import get_gmail_service
 
 
 class EmailRule:
-    """A class representing an email rule.
+    """
+    A class representing an email rule.
 
     Attributes:
         name: The name of the rule.
@@ -22,7 +25,8 @@ class EmailRule:
     """
 
     def __init__(self, rule_data: Dict[str, Any]) -> None:
-        """Initialize an EmailRule instance.
+        """
+        Initialize an EmailRule instance.
 
         Args:
             rule_data: A dictionary containing the rule data.
@@ -35,7 +39,8 @@ class EmailRule:
         logging.info("Initialized rule: %s", self.name)
 
     def evaluate(self, email: Dict[str, Any]) -> bool:
-        """Evaluate if the rule applies to the given email.
+        """
+        Evaluate if the rule applies to the given email.
 
         Args:
             email: A dictionary containing email data.
@@ -49,7 +54,8 @@ class EmailRule:
         return result
 
     def evaluate_condition(self, condition: Dict[str, str], email: Dict[str, Any]) -> bool:
-        """Evaluate a single condition for the given email.
+        """
+        Evaluate a single condition for the given email.
 
         Args:
             condition: A dictionary containing the condition details.
@@ -77,7 +83,8 @@ class EmailRule:
         return result
 
     def get_field_value(self, email: Dict[str, Any], field: str) -> str:
-        """Get the value of the specified field from the email.
+        """
+        Get the value of the specified field from the email.
 
         Args:
             email: A dictionary containing email data.
@@ -97,7 +104,8 @@ class EmailRule:
         return value
 
     def evaluate_text_condition(self, field_value: str, predicate: str, value: str) -> bool:
-        """Evaluate text-based conditions.
+        """
+        Evaluate text-based conditions.
 
         Args:
             field_value: The value of the field to evaluate.
@@ -119,7 +127,8 @@ class EmailRule:
         return False
 
     def evaluate_date_condition(self, field_value: str, predicate: str, value: str) -> bool:
-        """Evaluate date-based conditions.
+        """
+        Evaluate date-based conditions.
 
         Args:
             field_value: The value of the date field to evaluate.
@@ -135,9 +144,9 @@ class EmailRule:
             num_days, unit = value.split()
             num_days = int(num_days)
 
-            if unit == "D":
+            if unit == "d":
                 days_to_subtract = num_days
-            elif unit == "M":
+            elif unit == "m":
                 days_to_subtract = num_days * 30
             else:
                 logging.warning("Unknown time unit '%s' for date condition", unit)
@@ -158,7 +167,8 @@ class EmailRule:
         return False
 
     def apply_actions(self, email: Dict[str, Any]) -> None:
-        """Apply the specified actions to the given email.
+        """
+        Apply the specified actions to the given email.
 
         Args:
             email: A dictionary containing email data.
@@ -182,25 +192,65 @@ class EmailRule:
                 logging.error("Error applying action: %s %s to email ID: %s", action_type, action_value, email["id"])
                 logging.error(traceback.format_exc())
 
-    def move_email(self, email: Dict[str, Any], label: str) -> None:
-        """Move the given email to the specified label.
+    def move_email(self, email: Dict[str, Any], target_label: str) -> None:
+        """
+        Move the given email to the specified label.
 
         Args:
             email: A dictionary containing email data.
-            label: The label to move the email to.
+            target_label: The label to move the email to.
         """
         service = get_gmail_service()
+        label_id = self._get_label_id(service, target_label)
+
+        if label_id:
+            self._modify_email_labels(service, email["id"], label_id)
+        else:
+            logging.error(f"Label '{target_label}' not found for email ID: {email['id']}")
+
+    def _get_label_id(self, service: Resource, target_label: str) -> Optional[str]:
+        """
+        Get the ID of the specified label from the user's Gmail account.
+
+        Args:
+            service: The Gmail API service object.
+            target_label: The name of the label to find.
+
+        Returns:
+            The ID of the label if found, None otherwise.
+        """
+        try:
+            results = service.users().labels().list(userId="me").execute()
+            labels = results.get("labels", [])
+            for label in labels:
+                if label["name"] == target_label:
+                    return label["id"]
+            return None
+        except Exception as e:
+            logging.error(f"Error fetching labels: {e}")
+            return None
+
+    def _modify_email_labels(self, service: Resource, email_id: str, label_id: str) -> None:
+        """
+        Modify the labels of the specified email.
+
+        Args:
+            service: The Gmail API service object.
+            email_id: The ID of the email to modify.
+            label_id: The ID of the label to add.
+        """
         try:
             service.users().messages().modify(
-                userId="me", id=email["id"], body={"addLabelIds": [label], "removeLabelIds": ["INBOX"]}
+                userId="me", id=email_id, body={"addLabelIds": [label_id], "removeLabelIds": ["INBOX"]}
             ).execute()
-            logging.info("Moved email ID: %s to label: %s", email["id"], label)
+            logging.info(f"Moved email ID: {email_id} to label ID: {label_id}")
         except Exception:
-            logging.error("Error moving email ID: %s to label: %s", email["id"], label)
+            logging.error(f"Error moving email ID: {email_id} to label ID: {label_id}")
             logging.error(traceback.format_exc())
 
     def mark_email_as_read(self, email: Dict[str, Any]) -> None:
-        """Mark the given email as read.
+        """
+        Mark the given email as read.
 
         Args:
             email: A dictionary containing email data.
@@ -216,7 +266,8 @@ class EmailRule:
             logging.error(traceback.format_exc())
 
     def mark_email_as_unread(self, email: Dict[str, Any]) -> None:
-        """Mark the given email as unread.
+        """
+        Mark the given email as unread.
 
         Args:
             email: A dictionary containing email data.

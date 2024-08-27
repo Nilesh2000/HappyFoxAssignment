@@ -15,7 +15,8 @@ from .authenticate import get_gmail_service
 
 
 def fetch_emails(num_messages: int = 25) -> List[Dict[str, Any]]:
-    """Fetch emails from the user's Gmail account.
+    """
+    Fetch emails from the user's Gmail account.
 
     Args:
         num_messages: Number of messages to fetch. Defaults to 25.
@@ -37,7 +38,8 @@ def fetch_emails(num_messages: int = 25) -> List[Dict[str, Any]]:
 
 
 def _get_messages(service: Resource, num_messages: int) -> List[Dict[str, Any]]:
-    """Get the messages from the user's Gmail account.
+    """
+    Get the messages from the user's Gmail account.
 
     Args:
         service: The Gmail API service object.
@@ -59,7 +61,8 @@ def _get_messages(service: Resource, num_messages: int) -> List[Dict[str, Any]]:
 
 
 def _parse_email(service: Resource, message_id: str) -> Dict[str, Any]:
-    """Parse the email data.
+    """
+    Parse the email data.
 
     Args:
         service: The Gmail API service object.
@@ -99,7 +102,8 @@ def _parse_email(service: Resource, message_id: str) -> Dict[str, Any]:
 
 
 def _parse_date(date_string: str) -> Optional[datetime]:
-    """Parse the date string from email header.
+    """
+    Parse the date string from email header.
 
     Args:
         date_string: The raw date string from email header.
@@ -117,7 +121,8 @@ def _parse_date(date_string: str) -> Optional[datetime]:
 
 
 def _get_email_body(email: Dict[str, Any]) -> str:
-    """Get the email body.
+    """
+    Get the email body.
 
     Args:
         email: The email message dictionary.

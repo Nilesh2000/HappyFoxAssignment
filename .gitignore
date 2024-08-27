@@ -6,3 +6,6 @@ credentials.json
 
 # Ignore token
 token.json
+
+# Ignore database
+db.sqlite3

@@ -46,6 +46,14 @@ Python scripts to fetch emails from Gmail, store them in a database, and perform
 
 7. You can view logs in the generated `app.log` file.
 
+## Tech Stack
+
+- Python 3
+- Google Cloud Platform (For Gmail API)
+- SQLite
+- SQLAlchemy
+- Pytest
+
 ## Project Structure
 
 ```

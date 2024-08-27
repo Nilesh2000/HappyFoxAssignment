@@ -6,7 +6,7 @@ import logging
 from typing import Any, Dict, List
 
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import Session, sessionmaker
 
 from .models import Base, Email
 
@@ -26,6 +26,25 @@ class DatabaseManager:
         self.Session = sessionmaker(bind=self.engine)
         Base.metadata.create_all(self.engine)
 
+    def _get_session(self) -> Session:
+        """Create and return a new database session."""
+        return self.Session()
+
+    def _close_session(self, session: Session) -> None:
+        """Close the given database session."""
+        session.close()
+
+    def _add_email_to_session(self, session: Session, email_data: Dict[str, Any]) -> None:
+        """Add a single email to the session."""
+        new_email = Email(
+            id=email_data["id"],
+            subject=email_data["subject"],
+            sender=email_data["sender"],
+            date=email_data["date"],
+            body=email_data["body"],
+        )
+        session.add(new_email)
+
     def save_emails(self, emails: List[Dict[str, Any]]) -> None:
         """
         Save a list of emails to the database.
@@ -34,17 +53,10 @@ class DatabaseManager:
             emails: A list of dictionaries containing email data.
         """
         logging.info(f"Starting to save {len(emails)} emails to the database")
-        session = self.Session()
+        session = self._get_session()
         try:
             for email in emails:
-                new_email = Email(
-                    id=email["id"],
-                    subject=email["subject"],
-                    sender=email["sender"],
-                    date=email["date"],
-                    body=email["body"],
-                )
-                session.add(new_email)
+                self._add_email_to_session(session, email)
             session.commit()
             logging.info(f"Finished saving {len(emails)} emails to the database")
         except Exception as e:
@@ -52,7 +64,7 @@ class DatabaseManager:
             logging.error(f"Error saving emails to database: {e}")
             logging.exception("Exception details:")
         finally:
-            session.close()
+            self._close_session(session)
 
     def fetch_emails(self) -> List[Dict[str, Any]]:
         """
@@ -62,7 +74,7 @@ class DatabaseManager:
             A list of dictionaries containing email data.
         """
         logging.info("Fetching emails from the database")
-        session = self.Session()
+        session = self._get_session()
         try:
             emails = session.query(Email).all()
             return [email.to_dict() for email in emails]
@@ -71,4 +83,4 @@ class DatabaseManager:
             logging.exception("Exception details:")
             return []
         finally:
-            session.close()
+            self._close_session(session)

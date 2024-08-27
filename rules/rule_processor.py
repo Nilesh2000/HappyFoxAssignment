@@ -9,7 +9,7 @@ from typing import Any, Dict, List, Optional
 
 from googleapiclient.discovery import Resource
 
-from gmail.authenticate import get_gmail_service
+from gmail.authenticate import GmailAuthenticator
 
 
 class EmailRule:
@@ -198,7 +198,7 @@ class EmailRule:
             email: A dictionary containing email data.
             target_label: The label to move the email to.
         """
-        service = get_gmail_service()
+        service = GmailAuthenticator.get_gmail_service()
         label_id = self._get_label_id(service, target_label)
 
         if label_id:
@@ -253,7 +253,7 @@ class EmailRule:
         Args:
             email: A dictionary containing email data.
         """
-        service = get_gmail_service()
+        service = GmailAuthenticator.get_gmail_service()
         try:
             service.users().messages().modify(
                 userId="me", id=email["id"], body={"removeLabelIds": ["UNREAD"]}
@@ -270,7 +270,7 @@ class EmailRule:
         Args:
             email: A dictionary containing email data.
         """
-        service = get_gmail_service()
+        service = GmailAuthenticator.get_gmail_service()
         try:
             service.users().messages().modify(userId="me", id=email["id"], body={"addLabelIds": ["UNREAD"]}).execute()
             logging.info(f"Marked email ID: {email['id']} as unread")

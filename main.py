@@ -2,6 +2,7 @@
 This script applies operations to emails in the database using Gmail API.
 """
 
+import argparse
 import logging
 from typing import Any, Dict, List
 
@@ -13,7 +14,7 @@ from gmail.fetch import fetch_emails
 from utils.logging_config import configure_logging
 
 
-def main() -> None:
+def main(num_messages: int) -> None:
     """Main function to run the email rule application process."""
     configure_logging()
 
@@ -21,7 +22,7 @@ def main() -> None:
         logging.info("Starting email rule application process")
 
         # Fetch emails from Gmail
-        emails: List[Dict[str, Any]] = fetch_emails()
+        emails: List[Dict[str, Any]] = fetch_emails(num_messages)
 
         # Save emails to database
         db_manager = DatabaseManager()
@@ -38,4 +39,8 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Email rule application process")
+    parser.add_argument("--num_messages", type=int, default=25, help="Number of messages to fetch from Gmail")
+    args = parser.parse_args()
+
+    main(args.num_messages)

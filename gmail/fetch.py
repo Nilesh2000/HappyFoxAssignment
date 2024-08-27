@@ -14,7 +14,7 @@ from googleapiclient.discovery import Resource
 from .authenticate import get_gmail_service
 
 
-def fetch_emails(num_messages: int = 25) -> List[Dict[str, Any]]:
+def fetch_emails(num_messages: int = 100) -> List[Dict[str, Any]]:
     """
     Fetch emails from the user's Gmail account.
 

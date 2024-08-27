@@ -1,0 +1,30 @@
+[
+  {
+    "name": "Rule 1",
+    "description": "Mark Emails containing HappyFox as unread",
+    "type": "any",
+    "condition": [
+      {
+        "field": "from",
+        "predicate": "contains",
+        "value": "happyfox"
+      },
+      {
+        "field": "subject",
+        "predicate": "contains",
+        "value": "HappyFox"
+      },
+      {
+        "field": "message",
+        "predicate": "contains",
+        "value": "HappyFox"
+      }
+    ],
+    "action": [
+      {
+        "type": "mark",
+        "value": "unread"
+      }
+    ]
+  }
+]

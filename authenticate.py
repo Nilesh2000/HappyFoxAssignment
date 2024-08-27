@@ -7,6 +7,7 @@ for the Gmail API, including loading, refreshing, and saving credentials.
 
 import logging
 import os
+import traceback
 from typing import Optional
 
 from google.auth.exceptions import RefreshError
@@ -95,17 +96,22 @@ def authenticate_gmail() -> Optional[Credentials]:
     Returns:
         Optional[Credentials]: The valid credentials for Gmail API access, or None if authentication fails.
     """
-    creds = load_credentials()
+    try:
+        creds = load_credentials()
 
-    if not creds or not creds.valid:
-        creds = refresh_credentials(creds) or get_new_credentials()
-        if creds:
-            save_credentials(creds)
-        else:
-            logging.error("Failed to obtain valid credentials.")
-            return None
+        if not creds or not creds.valid:
+            creds = refresh_credentials(creds) or get_new_credentials()
+            if creds:
+                save_credentials(creds)
+            else:
+                logging.error("Failed to obtain valid credentials.")
+                return None
 
-    return creds
+        return creds
+    except Exception as e:
+        logging.error(f"Error during authentication: {e}")
+        logging.error(traceback.format_exc())
+        return None
 
 
 def get_gmail_service():
@@ -123,4 +129,9 @@ def get_gmail_service():
             return None
     except HttpError as e:
         logging.error(f"Error creating Gmail service: {e}")
+        logging.error(traceback.format_exc())
+        return None
+    except Exception as e:
+        logging.error(f"Unexpected error creating Gmail service: {e}")
+        logging.error(traceback.format_exc())
         return None

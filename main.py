@@ -28,6 +28,7 @@ import datetime
 import json
 import logging
 import sqlite3
+import traceback
 from typing import Any, Dict, List
 
 from fetch import fetch_emails, get_gmail_service
@@ -179,14 +180,18 @@ class EmailRule:
             action_type: str = action["type"]
             action_value: str = action["value"]
 
-            if action_type == "move":
-                self.move_email(email, action_value)
-            elif action_type == "mark":
-                if action_value == "read":
-                    self.mark_email_as_read(email)
-                elif action_value == "unread":
-                    self.mark_email_as_unread(email)
-            logging.info(f"Applied action: type='{action_type}', value='{action_value}' to email ID: {email['id']}")
+            try:
+                if action_type == "move":
+                    self.move_email(email, action_value)
+                elif action_type == "mark":
+                    if action_value == "read":
+                        self.mark_email_as_read(email)
+                    elif action_value == "unread":
+                        self.mark_email_as_unread(email)
+                logging.info(f"Applied action: type='{action_type}', value='{action_value}' to email ID: {email['id']}")
+            except Exception:
+                logging.error(f"Error applying action: {action_type} {action_value} to email ID: {email['id']}")
+                logging.error(traceback.format_exc())
 
     def move_email(self, email: Dict[str, Any], label: str) -> None:
         """Move the given email to the specified label.
@@ -201,8 +206,9 @@ class EmailRule:
                 userId="me", id=email["id"], body={"addLabelIds": [label], "removeLabelIds": ["INBOX"]}
             ).execute()
             logging.info(f"Moved email ID: {email['id']} to label: {label}")
-        except Exception as e:
-            logging.error(f"Error moving email: {e}")
+        except Exception:
+            logging.error(f"Error moving email ID: {email['id']} to label: {label}")
+            logging.error(traceback.format_exc())
 
     def mark_email_as_read(self, email: Dict[str, Any]) -> None:
         """Mark the given email as read.
@@ -218,6 +224,7 @@ class EmailRule:
             logging.info(f"Marked email ID: {email['id']} as read")
         except Exception as e:
             logging.error(f"Error marking email as read: {e}")
+            logging.error(traceback.format_exc())
 
     def mark_email_as_unread(self, email: Dict[str, Any]) -> None:
         """Mark the given email as unread.
@@ -231,6 +238,7 @@ class EmailRule:
             logging.info(f"Marked email ID: {email['id']} as unread")
         except Exception as e:
             logging.error(f"Error marking email as unread: {e}")
+            logging.error(traceback.format_exc())
 
 
 class EmailRuleEngine:
@@ -258,8 +266,15 @@ class EmailRuleEngine:
                 rules = [EmailRule(rule_data) for rule_data in json.load(f)]
             logging.info(f"Loaded {len(rules)} rules from rules.json")
             return rules
+        except json.JSONDecodeError as e:
+            logging.error(f"Error parsing rules.json: {e}")
+            return []
+        except IOError as e:
+            logging.error(f"Error reading rules.json: {e}")
+            return []
         except Exception as e:
-            logging.error(f"Error loading rules: {e}")
+            logging.error(f"Unexpected error loading rules: {e}")
+            logging.error(traceback.format_exc())
             return []
 
     def fetch_emails_from_db(self) -> List[Dict[str, Any]]:
@@ -277,8 +292,12 @@ class EmailRuleEngine:
             conn.close()
             logging.info(f"Fetched {len(emails)} emails from the database")
             return emails
+        except sqlite3.Error as e:
+            logging.error(f"SQLite error fetching emails from database: {e}")
+            return []
         except Exception as e:
-            logging.error(f"Error fetching emails from database: {e}")
+            logging.error(f"Unexpected error fetching emails from database: {e}")
+            logging.error(traceback.format_exc())
             return []
 
     def apply_rules(self) -> None:
@@ -286,15 +305,23 @@ class EmailRuleEngine:
         for rule in self.rules:
             logging.info(f"Applying rule: {rule.name}")
             for email in self.emails:
-                if rule.evaluate(email):
-                    rule.apply_actions(email)
+                try:
+                    if rule.evaluate(email):
+                        rule.apply_actions(email)
+                except Exception:
+                    logging.error(f"Error applying rule '{rule.name}' to email ID: {email['id']}")
+                    logging.error(traceback.format_exc())
         logging.info("Finished applying all rules")
 
 
 if __name__ == "__main__":
-    logging.info("Starting email rule application process")
-    emails = fetch_emails()
-    save_emails_to_db(emails)
-    engine = EmailRuleEngine()
-    engine.apply_rules()
-    logging.info("Email rule application process completed")
+    try:
+        logging.info("Starting email rule application process")
+        emails = fetch_emails()
+        save_emails_to_db(emails)
+        engine = EmailRuleEngine()
+        engine.apply_rules()
+        logging.info("Email rule application process completed")
+    except Exception:
+        logging.error("An unexpected error occurred during the email rule application process")
+        logging.error(traceback.format_exc())

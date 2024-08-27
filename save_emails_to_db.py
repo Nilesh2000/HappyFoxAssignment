@@ -3,6 +3,7 @@ This script saves the emails fetched from the Gmail API to a SQLite database usi
 """
 
 import logging
+import traceback
 from typing import Dict, List
 
 from sqlalchemy import Column, DateTime, String, create_engine
@@ -65,6 +66,7 @@ class DatabaseManager:
         except Exception as e:
             session.rollback()
             logging.error(f"Error inserting email with ID {email['id']}: {str(e)}")
+            logging.error(traceback.format_exc())
         finally:
             session.close()
 
@@ -77,10 +79,14 @@ def save_emails_to_db(emails: List[Dict[str, str]]) -> None:
         emails (List[Dict[str, str]]): A list of dictionaries containing email data.
     """
     logging.info(f"Starting to save {len(emails)} emails to the database")
-    manager = DatabaseManager()
-    manager.create_table()
+    try:
+        manager = DatabaseManager()
+        manager.create_table()
 
-    for email in emails:
-        manager.insert_email(email)
+        for email in emails:
+            manager.insert_email(email)
 
-    logging.info(f"Finished saving {len(emails)} emails to the database")
+        logging.info(f"Finished saving {len(emails)} emails to the database")
+    except Exception as e:
+        logging.error(f"Error saving emails to database: {e}")
+        logging.error(traceback.format_exc())

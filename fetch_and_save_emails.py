@@ -7,7 +7,7 @@ import logging
 from typing import Any, Dict, List
 
 from db.database_manager import DatabaseManager
-from gmail.fetch import fetch_emails
+from gmail.email_fetcher import fetch_emails
 
 # Configure logging
 from utils.logging_config import configure_logging
@@ -35,7 +35,7 @@ def main(num_messages: int) -> None:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Email fetch and save process")
-    parser.add_argument("--num_messages", type=int, default=25, help="Number of messages to fetch from Gmail")
+    parser.add_argument("--num-messages", type=int, default=25, help="Number of messages to fetch from Gmail")
     args = parser.parse_args()
 
     main(args.num_messages)

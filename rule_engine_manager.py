@@ -6,8 +6,8 @@ import logging
 from typing import Any, Dict, List
 
 from db.database_manager import DatabaseManager
-from rules.email_rule import EmailRule
 from rules.rule_loader import load_rules
+from rules.rule_processor import EmailRule
 
 
 class EmailRuleEngine:

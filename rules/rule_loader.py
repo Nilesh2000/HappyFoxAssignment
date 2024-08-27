@@ -6,7 +6,7 @@ import json
 import logging
 from typing import List
 
-from .email_rule import EmailRule
+from .rule_processor import EmailRule
 
 
 def load_rules() -> List[EmailRule]:

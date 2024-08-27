@@ -1,8 +1,7 @@
 import argparse
 import logging
 
-from email_rule_engine import EmailRuleEngine
-
+from rule_engine_manager import EmailRuleEngine
 from utils.logging_config import configure_logging
 
 

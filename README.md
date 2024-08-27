@@ -73,4 +73,13 @@ Python scripts to fetch emails from Gmail, store them in a database, and perform
     └── logging_config.py # Logging configuration
 ```
 
+## References
+
+- [Google Gmail API Quickstart](https://developers.google.com/gmail/api/quickstart/python)
+- [How to read emails from Gmail using Gmail API in Python?](https://www.geeksforgeeks.org/how-to-read-emails-from-gmail-using-gmail-api-in-python/?ref=asr1)
+- [Google API Python Client Issue](https://github.com/googleapis/google-api-python-client/issues/299)
+- [Convert Date String from Gmail to Timestamp Python](https://stackoverflow.com/questions/62092529/convert-date-string-from-gmail-to-timestamp-python)
+- [Hide Git Ignored Files in Tree](https://unix.stackexchange.com/questions/291282/have-tree-hide-gitignored-files)
+- [Bump urllib3 to get rid of annoying warning](https://github.com/explosion/spaCy/discussions/12750)
+
 ## Video Demo

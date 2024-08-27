@@ -26,5 +26,83 @@
         "value": "unread"
       }
     ]
+  },
+  {
+    "name": "Rule 2",
+    "description": "Mark recent messages from no-reply as read and move to a NoReply label",
+    "type": "all",
+    "condition": [
+      {
+        "field": "from",
+        "predicate": "contains",
+        "value": "no-reply"
+      },
+      {
+        "field": "date received",
+        "predicate": "less than",
+        "value": "30 D"
+      }
+    ],
+    "action": [
+      {
+        "type": "mark",
+        "value": "read"
+      },
+      {
+        "type": "move",
+        "value": "NoReply"
+      }
+    ]
+  },
+  {
+    "name": "Rule 3",
+    "description": "Move income-tax related emails to a Tax label",
+    "type": "any",
+    "condition": [
+      {
+        "field": "subject",
+        "predicate": "contains",
+        "value": "income tax"
+      },
+      {
+        "field": "message",
+        "predicate": "contains",
+        "value": "income tax"
+      }
+    ],
+    "action": [
+      {
+        "type": "move",
+        "value": "Tax"
+      }
+    ]
+  },
+  {
+    "name": "Rule 4",
+    "description": "Move emails containing IRCTC to a IRCTC label",
+    "type": "any",
+    "condition": [
+      {
+        "field": "from",
+        "predicate": "contains",
+        "value": "irctc"
+      },
+      {
+        "field": "subject",
+        "predicate": "contains",
+        "value": "irctc"
+      },
+      {
+        "field": "message",
+        "predicate": "contains",
+        "value": "irctc"
+      }
+    ],
+    "action": [
+      {
+        "type": "move",
+        "value": "IRCTC"
+      }
+    ]
   }
 ]

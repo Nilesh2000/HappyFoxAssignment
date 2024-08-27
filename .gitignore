@@ -9,3 +9,6 @@ token.json
 
 # Ignore database
 db.sqlite3
+
+# Ignore logs
+app.log

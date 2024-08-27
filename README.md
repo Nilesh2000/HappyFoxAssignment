@@ -57,7 +57,6 @@ Python scripts to fetch emails from Gmail, store them in a database, and perform
 ## Project Structure
 
 ```
-.
 ├── .gitignore # Ignore files and directories
 ├── .pre-commit-config.yaml # Pre-commit configuration
 ├── Assignment.pdf # Assignment PDF
@@ -88,6 +87,7 @@ Python scripts to fetch emails from Gmail, store them in a database, and perform
 - [Google API Python Client Issue](https://github.com/googleapis/google-api-python-client/issues/299)
 - [Convert Date String from Gmail to Timestamp Python](https://stackoverflow.com/questions/62092529/convert-date-string-from-gmail-to-timestamp-python)
 - [Hide Git Ignored Files in Tree](https://unix.stackexchange.com/questions/291282/have-tree-hide-gitignored-files)
+- [Do not log file_cache is only supported with oauth2client<4.0.0](https://stackoverflow.com/questions/40154672/importerror-file-cache-is-unavailable-when-using-python-client-for-google-ser)
 - [Bump urllib3 to get rid of annoying warning](https://github.com/explosion/spaCy/discussions/12750)
 
 ## Video Demo

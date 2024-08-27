@@ -3,3 +3,6 @@ env/
 
 # Ignore credentials
 credentials.json
+
+# Ignore token
+token.json

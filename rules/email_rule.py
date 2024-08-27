@@ -89,7 +89,7 @@ class EmailRule:
         field_mapping: Dict[str, str] = {
             "from": "sender",
             "subject": "subject",
-            "body": "body",
+            "message": "body",
             "date received": "date",
         }
         value = str(email.get(field_mapping.get(field, ""), "")).lower()

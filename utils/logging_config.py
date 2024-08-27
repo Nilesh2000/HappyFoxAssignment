@@ -12,3 +12,6 @@ def configure_logging() -> None:
         format="%(asctime)s - %(levelname)s - %(message)s",
         handlers=[logging.StreamHandler(), logging.FileHandler("app.log")],
     )
+
+    # Suppress logging from googleapiclient.discovery_cache
+    logging.getLogger("googleapicliet.discovery_cache").setLevel(logging.ERROR)

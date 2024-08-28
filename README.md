@@ -15,6 +15,7 @@ Python scripts to fetch emails from Gmail, store them in a database, and perform
 ## Overview
 
 This project provides a set of Python scripts that allow you to:
+
 1. Fetch emails from a Gmail account
 2. Store the fetched emails in a local SQLite database
 3. Apply customizable rules to process and manage the stored emails
@@ -101,6 +102,7 @@ This project provides a set of Python scripts that allow you to:
 │   └── rule_processor.py # Rule processor
 ├── rules.json # Rules configuration
 ├── run_rule_engine.py # Script to apply rules to the emails in the database
+├── rule_generator.py # Script to generate rules
 └── utils
     └── logging_config.py # Logging configuration
 ```

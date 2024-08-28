@@ -13,9 +13,9 @@ from rules.rule_processor import EmailRule
 class EmailRuleEngine:
     """A class to manage and apply email rules."""
 
-    def __init__(self) -> None:
+    def __init__(self, rules_path: str) -> None:
         """Initialize the EmailRuleEngine with rules and emails from the database."""
-        self.rules: List[EmailRule] = load_rules()
+        self.rules: List[EmailRule] = load_rules(rules_path)
         self.db_manager = DatabaseManager()
         self.emails: List[Dict[str, Any]] = self.db_manager.fetch_emails()
         logging.info(f"Initialized EmailRuleEngine with {len(self.rules)} rules and {len(self.emails)} emails")

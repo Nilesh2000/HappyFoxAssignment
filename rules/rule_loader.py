@@ -9,7 +9,7 @@ from typing import List
 from .rule_processor import EmailRule
 
 
-def load_rules() -> List[EmailRule]:
+def load_rules(rules_path: str) -> List[EmailRule]:
     """
     Load rules from the rules.json file.
 
@@ -17,7 +17,7 @@ def load_rules() -> List[EmailRule]:
         A list of EmailRule instances.
     """
     try:
-        with open("rules.json", "r") as f:
+        with open(rules_path, "r") as f:
             rules = [EmailRule(rule_data) for rule_data in json.load(f)]
         logging.info(f"Loaded {len(rules)} rules from rules.json")
         return rules

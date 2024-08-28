@@ -92,7 +92,6 @@ Python scripts to fetch emails from Gmail, store them in a database, and perform
 
 - [Google Gmail API Quickstart](https://developers.google.com/gmail/api/quickstart/python)
 - [How to read emails from Gmail using Gmail API in Python?](https://www.geeksforgeeks.org/how-to-read-emails-from-gmail-using-gmail-api-in-python/?ref=asr1)
-- [Google API Python Client Issue](https://github.com/googleapis/google-api-python-client/issues/299)
 - [Convert Date String from Gmail to Timestamp Python](https://stackoverflow.com/questions/62092529/convert-date-string-from-gmail-to-timestamp-python)
 - [Hide Git Ignored Files in Tree](https://unix.stackexchange.com/questions/291282/have-tree-hide-gitignored-files)
 - [Do not log file_cache is only supported with oauth2client<4.0.0](https://stackoverflow.com/questions/40154672/importerror-file-cache-is-unavailable-when-using-python-client-for-google-ser)

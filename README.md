@@ -9,6 +9,7 @@ Python scripts to fetch emails from Gmail, store them in a database, and perform
 - [Project Structure](#project-structure)
 - [References](#references)
 - [Video Demo](#video-demo)
+- [Contributors](#contributors)
 
 ## Installation and Setup
 
@@ -98,3 +99,7 @@ Python scripts to fetch emails from Gmail, store them in a database, and perform
 - [Bump urllib3 to get rid of annoying warning](https://github.com/explosion/spaCy/discussions/12750)
 
 ## Video Demo
+
+## Contributors
+
+- [Nilesh D](https://github.com/Nilesh2000) - Development and Documentation

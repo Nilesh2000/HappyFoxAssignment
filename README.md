@@ -1,6 +1,6 @@
 # HappyFox Assignment
 
-Python scripts to fetch emails from Gmail, store them in a database, and perform rule-based operations on them. ((Video Demo)[https://youtu.be/Tbbc49QYREg])
+Python scripts to fetch emails from Gmail, store them in a database, and perform rule-based operations on them. ([Video Demo](https://youtu.be/Tbbc49QYREg))
 
 ## Table of Contents
 

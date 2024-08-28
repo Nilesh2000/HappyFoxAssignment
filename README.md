@@ -4,11 +4,20 @@ Python scripts to fetch emails from Gmail, store them in a database, and perform
 
 ## Table of Contents
 
+- [Overview](#overview)
 - [Installation and Setup](#installation-and-setup)
+- [Usage](#usage)
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
 - [References](#references)
 - [Contributors](#contributors)
+
+## Overview
+
+This project provides a set of Python scripts that allow you to:
+1. Fetch emails from a Gmail account
+2. Store the fetched emails in a local SQLite database
+3. Apply customizable rules to process and manage the stored emails
 
 ## Installation and Setup
 
@@ -40,27 +49,35 @@ Python scripts to fetch emails from Gmail, store them in a database, and perform
    - Create credentials (OAuth 2.0 Client ID) and download the `credentials.json` file
    - Place the `credentials.json` file in the project root directory
 
-5. Run the script to fetch and store emails in the database. Number of messages to be fetched is configurable and defaults to 25. (This step is to be done only once):
+## Usage
+
+1. Fetch and store emails:
 
    ```
    python fetch_and_save_emails.py --num-messages 100
    ```
 
-6. Run the script to apply rules to the emails in the database:
+   This script fetches emails from Gmail and stores them in the database. The number of messages to be fetched is configurable and defaults to 25. Use the `--num-messages` flag to specify a different number.
+
+2. Apply rules to emails:
 
    ```
-   python run_rule_engine.py
+   python run_rule_engine.py --rules myrules.json
    ```
 
-7. You can view logs in the generated `app.log` file.
+   This script applies rules to the emails stored in the database. You can specify a custom rules file using the `--rules` flag. The default rules file is `rules.json`.
+
+3. View logs:
+
+   Check the generated `app.log` file for detailed logging information.
 
 ## Tech Stack
 
-- [Python 3](https://www.python.org/downloads/)
-- [Google Cloud Platform](https://cloud.google.com/) (For Gmail API)
-- [SQLite](https://www.sqlite.org/)
-- [SQLAlchemy](https://www.sqlalchemy.org/)
-- [Pytest](https://docs.pytest.org/en/7.4.x/)
+- [Python 3](https://www.python.org/downloads/): Primary programming language
+- [Google Cloud Platform](https://cloud.google.com/): For Gmail API integration
+- [SQLite](https://www.sqlite.org/): Local database for storing emails
+- [SQLAlchemy](https://www.sqlalchemy.org/): ORM for database operations
+- [Pytest](https://docs.pytest.org/en/7.4.x/): For unit testing
 
 ## Project Structure
 

@@ -1,6 +1,6 @@
 # HappyFox Assignment
 
-Python scripts to fetch emails from Gmail, store them in a database, and perform rule-based operations on them.
+Python scripts to fetch emails from Gmail, store them in a database, and perform rule-based operations on them. ((Video Demo)[https://youtu.be/Tbbc49QYREg])
 
 ## Table of Contents
 
@@ -8,7 +8,6 @@ Python scripts to fetch emails from Gmail, store them in a database, and perform
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
 - [References](#references)
-- [Video Demo](#video-demo)
 - [Contributors](#contributors)
 
 ## Installation and Setup
@@ -97,8 +96,6 @@ Python scripts to fetch emails from Gmail, store them in a database, and perform
 - [Hide Git Ignored Files in Tree](https://unix.stackexchange.com/questions/291282/have-tree-hide-gitignored-files)
 - [Do not log file_cache is only supported with oauth2client<4.0.0](https://stackoverflow.com/questions/40154672/importerror-file-cache-is-unavailable-when-using-python-client-for-google-ser)
 - [Bump urllib3 to get rid of annoying warning](https://github.com/explosion/spaCy/discussions/12750)
-
-## Video Demo
 
 ## Contributors
 
